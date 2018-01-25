@@ -2,7 +2,6 @@
     Page.Title = "CheckBoxes";
     Layout = "~/_Layout.cshtml";
 
-    var platforms = Request.Form["CheckBoxGroup"];
 }
 
 @section head
@@ -17,6 +16,7 @@
         <h1>CheckBoxes</h1>
 
     }
+    var platforms = Request.Form["CheckBoxGroup"];
 
     @if(IsPost)
     {
@@ -37,13 +37,14 @@
         char[] delimiter = { ',' };
 
         <p>
-            I see you like to play on the following platforms:
+            I see you like to play on the following platform(s):
             <ul>
                 @foreach(var item in platforms.Split(delimiter))
                 {
                     <li>@item</li>
                 }
             </ul>
+
         </p>
     }
 
