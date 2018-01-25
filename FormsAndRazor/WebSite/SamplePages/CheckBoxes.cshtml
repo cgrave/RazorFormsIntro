@@ -1,75 +1,82 @@
 ﻿@{
-    Page.Title = "CheckBoxes";
-    Layout = "~/_Layout.cshtml";
-
+	Page.Title = "CheckBoxes";
+	Layout = "~/_Layout.cshtml";
 }
 
 @section head
 {
-    <!-- put in a link to a custom .css file-->
-    <link href="~/Content/MyCSS.css" rel="stylesheet" />
-
+	<!-- put in a link to a custom .css file-->
+	<link href="~/Content/MyCSS.css" rel="stylesheet" />
 }
 <div>
-    @section banner
+	@section banner
 {
-        <h1>CheckBoxes</h1>
+		<h1>CheckBoxes</h1>
+	}
+	@if (IsPost)
+	{
+		//this sample delays the access to the data from the form
+		//The checkbox has two components the hidden value and
+		//  the displayed text
+		//Request.Form[] returns the hidden value
+		//The value is a comma delimited string of your choices
+		//If no choice was made the value will be empty
+		var platforms = Request.Form["CheckBoxGroup"];
+		if (platforms.IsEmpty())
+		{
+			<p><span style="color:firebrick">Make sure your select a platform(s) from the list.</span></p>
+		}
+		else
+		{
+			//processing of the choices will be done with a
+			//    method called .Split(delimiter character)
+			//the delimiter for our example will be a comma ,
+			//to traverse the string list, we will use
+			//   the pretext-loop syntax foreach
+			char[] delimiter = { ',' };
+			<p>
+				I see you like to play on the following platform(s):
+				<ul>
+					@foreach (var item in platforms.Split(delimiter))
+					{
+						<li>@item</li>
+					}
+				</ul>
 
-    }
-    var platforms = Request.Form["CheckBoxGroup"];
+			</p>
 
-    @if(IsPost)
-    {
-        // this sample delays the access the data from the form
-        //The checkbox has two components the hidden value and he displayed text. Request.Form[] returns the hidden value
-        // the value is a comma delimited string of your choices
-        // if no choice was made the value will be empty
-        if (platforms.IsEmpty())
-        {
-            <p><span style="color:firebrick">Make sure you select a platform(s) from the list.</span></p>
-        }
-    }
-    else
-    {
-        // processing of the choices will be done with a method called .Split(delimiter character)
-        // the delimiter for our example will be a comma ,
-        // to traverse the string list, we will use the pretest loop syntax foreach
-        char[] delimiter = { ',' };
+		}
+	}
+	<form id="theForm" action="" method="post">
+		<div class="row">
+			<div class="col-md-offset-1">
+				<label for="CheckBoxGroup">Select your favorite gaming platform(s).</label><br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="PS4" />&nbsp;PS4<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="PC" />&nbsp;PC<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="XBox One" />&nbsp;XBox One<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="Nintendo DS" />&nbsp;Nintendo DS<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="Cellphone" />&nbsp;Cell<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="Ipad" />&nbsp;Ipad<br />
+				<input type="checkbox" id="CheckBoxGroup"
+					   name="CheckBoxGroup" value="WII" />&nbsp;WII<br /><br />
+				<button type="submit" name="formButton"
+						value="submit" class="btn btn-primary">
+					Make your selection(s)
+				</button>
+			</div>
+		</div>
+	</form>
 
-        <p>
-            I see you like to play on the following platform(s):
-            <ul>
-                @foreach(var item in platforms.Split(delimiter))
-                {
-                    <li>@item</li>
-                }
-            </ul>
-
-        </p>
-    }
-
-
-<form id="theForm" action="" method="post">
-    <div class="row">
-        <div class="col-md-offset-1">
-            <label for="CheckBoxGroup">Select your favourite gaming plateform(s).</label><br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="PS4" />&nbsp;PS4<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="PC" />&nbsp;PC<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="XBox One" />&nbsp;XBox One<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="Nintendo DS" />&nbsp;Nintendo DS<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="CelPhone" />&nbsp;Cell<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="iPad" />&nbsp;iPad<br />
-            <input type="checkbox" id="CheckBoxGroup" name="CheckBoxGroup" value="Wii" />&nbsp;Wii<br /><br />
-            <button type="submit" name="formButton" value="submit" class="btn btn-primary">Make your selection(s)</button>
-        </div>
-    </div>
-
-</form>
-
-    @section footer
+	@section footer
 {
-        <p>
-            &copy; CPSC1517, Nait Today's date is
-            @DateTime.Today.ToLongDateString().
-        </p>}
+		<p>
+			&copy; CPSC1517, Nait Today's date is
+			@DateTime.Today.ToLongDateString().
+		</p>}
 </div>
