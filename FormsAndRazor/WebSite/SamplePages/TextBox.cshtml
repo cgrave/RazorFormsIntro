@@ -1,0 +1,65 @@
+﻿@{
+    Page.Title = "TextBox";
+    Layout = "~/_Layout.cshtml";
+    //extract the data from the input control (textbox)
+    //the control will be referenced using Request.Form["controlname"]
+    //all data comes from a control as a STRING
+    string leftdata = Request.Form["leftSide"];
+    string rightdata = Request.Form["rightSide"];
+    string buttonpressed = Request.Form["buttonname"];
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+@section banner
+{
+    <h1>TextBox</h1>
+}
+<div>
+
+    @if (IsPost)
+    {
+        if (buttonpressed.Equals("left"))
+        {
+            //this code will execute ONLY on a post back of the form
+            <p> You entered the following &gt; @leftdata &lt; on the left side</p>
+        }
+        else
+        {
+            <p> You entered the following &gt; @rightdata &lt; on the right side</p>
+        }
+
+    }
+
+    <form id="theForm" action="" method="post">
+        <div class="col-md-4">
+            <label for="leftSide">Left Data</label>
+            <input type="text" id="leftSide" name="leftSide" placeholder="Prompt not data" style="width:200px;" />
+            <button type="submit" name="buttonname" id="buttonname"
+                    value="left" class="btn btn-primary">
+                Press Me
+            </button>
+        </div>
+
+        <div class="col-md-6">
+            <label for="rightSide">Right Data</label>
+            <input type="text" id="rightSide" name="rightSide" placeholder="Prompt not data" style="width:200px;" />
+            <button type="submit" name="buttonname" id="buttonname"
+                    value="right" class="btn">
+                Press Me
+            </button>
+        </div>
+    </form>
+    <br />
+</div>
+
+
+@section footer
+{
+    <p>
+        &copy; CPSC1517, Nait Today's date is
+        @DateTime.Today.ToLongDateString().
+    </p>}

@@ -1,0 +1,22 @@
+﻿@{
+    Page.Title = "Basic Controls";
+    Layout = "~/_Layout.cshtml";
+    string name = "Don Welch";
+}
+
+@section head
+{
+   <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+     }
+@section banner
+{
+    <h1>@name</h1>
+}
+<div>
+    <a href="~/Default.cshtml">Home</a>
+</div>
+@section footer
+{
+    <p>&copy; CPSC1517, Nait Today's date is 
+    @DateTime.Today.ToLongDateString(). </p>}

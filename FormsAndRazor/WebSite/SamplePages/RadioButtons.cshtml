@@ -1,0 +1,96 @@
+﻿@{
+    Page.Title = "RadioButtons";
+    Layout = "~/_Layout.cshtml";
+
+    // this page processes from the top to the bottom
+    //datatype: var
+    // this data type has no specific type at compile time, this data type is set when the variable is first used, is a runtype variable. Once it is set, it cannot be changed
+
+    var languageGroup = Request.Form["LanguageGroup"];
+    var ScriptGroup = Request.Form["ScriptGroup"];
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+
+<div>
+@section banner
+{
+    <h1>RadioButtons</h1>
+}
+    <!-- processing-->
+
+    @if (IsPost)
+    {
+        if(languageGroup.IsEmpty() || ScriptGroup.IsEmpty())
+        {
+            <p><span style="color:firebrick">Make sure you select from both lists.</span></p>
+
+        }
+        else
+        {
+            if(languageGroup.Equals("C#", StringComparison.OrdinalIgnoreCase))
+            {
+                <p>You will enjoy CPSC1517 this semester, we use c#.</p>
+            }
+            else
+            {
+                <p>Too bad you choose @languageGroup, we use C#</p>
+            }
+            //next thing
+            if (ScriptGroup.Equals("Razor", StringComparison.OrdinalIgnoreCase))
+            {
+                <p>You will enjoy CPSC1517 this semester, we use Razor.</p>
+            }
+            else
+            {
+                <p>Too bad you choose @ScriptGroup, we use Razor</p>
+            }
+        }
+    }
+    else
+    {
+        // to set the initial values for your controls. the else would only execute if IsPost is false
+    }
+
+    <form id="theForm" action="" method="post">
+        <!-- Radio buttons belong in a group of choices. You may only select one choice from the group. You may have several groups on the same form.
+            each radio button group has a unique name. all choices in the group use the same unique name. Radio buttons have two componets; a hidden value and a display text.
+            When retrieving the data value for the radio button group, you get the hidden value
+            -->
+        <div class="row">
+            <div class="col-md-offset-2">
+                <label for="LanguageGroup"> Select your favourite programming language.</label><br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="C#" />C# <br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="VisualBasic" />Visual Basic <br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="ObjectiveC" />Swift<br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="Cobol" />Cobol <br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="Fortran" />Fortran <br />
+                <input type="radio" id="LanguageGroup" name="LanguageGroup" value="Pascal" />Pascal <br />
+                <br />
+                <label for="ScriptGroup"> Select your favourite scripting code.</label><br />
+                <input type="radio" id="ScriptGroup" name="ScriptGroup" value="JavaScript" />JavaScript <br />
+                <input type="radio" id="ScriptGroup" name="ScriptGroup" value="Razor" />Razor <br />
+                <input type="radio" id="ScriptGroup" name="ScriptGroup" value="PHP" />PHP<br />
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-5">
+                <button type="submit" name="formButton" value="submit" class="btn btn-primary">Choose</button>
+
+            </div>
+
+        </div>
+    </form>
+
+@section footer
+{
+    <p>
+        &copy; CPSC1517, Nait Today's date is
+        @DateTime.Today.ToLongDateString().
+    </p>}
+</div>

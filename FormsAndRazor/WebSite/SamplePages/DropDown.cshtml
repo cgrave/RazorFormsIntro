@@ -1,0 +1,77 @@
+﻿@{
+    Page.Title = "DropDown";
+    Layout = "~/_Layout.cshtml";
+    var choice = Request.Form["CodingSamples"];
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+<div>
+    @section banner
+{
+        <h1>DropDown (Select)</h1>
+    }
+    @if (IsPost)
+    {
+        switch (choice.ToUpper())
+        {
+            case "TEXTBOX":
+                {
+                    // the Response object is an outgoing request
+                    //.Redirect("pagename") can be used to branch to another page.
+                    Response.Redirect("TextBox.cshtml");
+                    break;
+                }
+            case "RADIOBUTTONS":
+                {
+                    // the Response object is an outgoing request
+                    //.Redirect("pagename") can be used to branch to another page.
+                    Response.Redirect("RadioButtons.cshtml");
+                    break;
+                }
+            case "CHECKBOX":
+                {
+                    // the Response object is an outgoing request
+                    //.Redirect("pagename") can be used to branch to another page.
+                    Response.Redirect("CheckBoxes.cshtml");
+                    break;
+                }
+            default:
+                {
+                    <p><span style="color:firebrick">Select a coding sample from the list</span></p>
+                    break;
+                }
+        }
+    }
+
+    <form id="theForm" action="" method="post">
+        <div class="row">
+            <div class="col-md-offset-3">
+                <label for="CodingSamples">Select the sample to view</label>&nbsp;&nbsp;
+                <select id="CodingSamples" name="CodingSamples">
+                    <!-- each choice line has two components: hidden value and display text, each choice is created using the option tag. The hidden value is returned on request.form-->
+                    <option value="">select...</option>
+                    <option value="TextBox">TextBox</option>
+                    <option value="RadioButtons">RadioButtons</option>
+                    <option value="CheckBox">CheckBox</option>
+                </select>
+                &nbsp;&nbsp;
+                <button type="submit" name="formButton" value="submit" class="btn btn-primary">Go To...</button>
+            </div>
+
+        </div>
+
+
+    </form>
+
+    @section footer
+{
+        <p>
+            &copy; CPSC1517, Nait Today's date is
+            @DateTime.Today.ToLongDateString().
+        </p>}
+
+</div>
