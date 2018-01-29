@@ -1,0 +1,24 @@
+﻿@{
+    Page.Title = "DB Single Query";
+    Layout = "~/_Layout.cshtml";
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+<div>
+    @section banner
+{
+        <h1>Database Query: Single Record</h1>
+    }
+
+
+@section footer
+{
+        <p>
+            &copy; CPSC1517, Nait Today's date is
+            @DateTime.Today.ToLongDateString().
+        </p>}
+</div>
