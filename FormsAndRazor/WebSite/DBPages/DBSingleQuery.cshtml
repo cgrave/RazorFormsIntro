@@ -1,0 +1,109 @@
+﻿@{
+    Page.Title = "DB Single Query";
+    Layout = "~/_Layout.cshtml";
+
+
+    var regionarg = Request.Form["RegionArg"];
+
+    // create some local variables to hold output values
+    var regionid = "";
+    var regiondescription = "";
+
+    // remmeber when the page is frist accessed the form has yet to be created and sent to the browser to obtain data for my seach argument. 
+    // to avoid an sql error using a null value assign a not found value of the correct datatype to your search argument
+    if(string.IsNullOrEmpty(regionarg))
+    {
+        regionarg = "0";
+    }
+
+    // database processing
+    //1. attach to your database
+    var db = Database.Open("NorthwindDB");
+
+    //2. create your query command
+    // replaceable arguments that will be used in the sql command will appear aas a numbered index placeholder(@0)
+    var querycommand = "SELECT RegionID, RegionDescription " + "FROM Region " + "WHERE RegionID = @0";
+
+    // executions
+    //requires the connection, the method, the command, and any list of parameters
+
+    //method
+    // 0 or 1 records returned: QuerySingle()
+    //0 , 1, or more records returned: Query()
+    //a single value returned: QueryValye()
+
+    var queryresults = db.QuerySingle(querycommand, regionarg);
+
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+<div>
+    @section banner
+{
+        <h1>Database Query: Single Record</h1>
+    }
+
+
+    @if(IsPost)
+    {
+        //check to see if any data was returned from the database
+
+        //QuerySingle: check for null
+        //Query: checl .COunt() > 0
+
+        if(queryresults == null)
+        {
+            // not found
+            <p>No data found for region id: @regionarg</p>
+            // delete any old results that are being displayed
+            regionid = "";
+            regiondescription = "";
+        }
+        else
+        {
+            // found data
+            <p>Found</p>
+
+            //fill the output variables with data from the results. Two ways of accessing sql row data
+            //using an index, index represents the column off the sql command
+            regionid = queryresults[0].ToString();
+
+            //using the SQL column Title as if it was a property
+            regiondescription = queryresults.RegionDescription;
+
+        }
+
+    }
+
+
+
+    <form id="theForm" action="" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="RegionArg">Enter Region ID:&nbsp;</label>
+                <input type="number" id="RegionArg" name="RegionArg" value="@regionarg" step="1" min="1" /><br />
+                <button type="submit" name="formButton" value="submit" class="btn btn-primary">Search</button>
+            </div>
+            <div class="col-md-6">
+                <label for="RegionID">Region ID:&nbsp;</label>
+                <input type="text" id="RegionID" name="RegionID" value="@regionid" readonly="readonly" /><br />
+                <label for="RegionDescription">Region Description:&nbsp;</label>
+                <input type="text" id="RegionDescription" name="RegionDescription" value="@regiondescription" readonly="readonly" /><br />
+
+            </div>
+        </div>
+    </form>
+
+
+
+@section footer
+{
+        <p>
+            &copy; CPSC1517, Nait Today's date is
+            @DateTime.Today.ToLongDateString().
+        </p>}
+</div>
