@@ -1,0 +1,67 @@
+﻿@{
+    Page.Title = "DB Multi Record Query";
+    Layout = "~/_Layout.cshtml";
+
+    // database processing to obtain data for select control
+
+    //connection
+    var db = Database.Open("NorthwindDB");
+
+    //command
+    // this query wants to return data needed for the select control, normally 2 values, one for hidden value, one for text display
+    var querycommand = "SELECT CategoryID, CategoryName "
+                        + "FROM Categories "
+                        + "ORDER BY CategoryName";
+
+    //execution
+    // one expects 0, 1 or more records to be returned from the database
+    // this means .Query() method is used
+    // there is no list of parameters for this execution
+    var selectresults = db.Query(querycommand);
+
+}
+
+@section head
+{
+    <!-- put in a link to a custom .css file-->
+    <link href="~/Content/MyCSS.css" rel="stylesheet" />
+}
+<div>
+    @section banner
+{
+        <h1>DB Query: Multiple Record Query</h1>
+    }
+
+    <form id="theForm" action="" method="post">
+        <div class="row">
+            <div class="col-md-offset-5">
+                <label id="CategoryList">Select a category:&nbsp;</label>
+                <select name="CategoryList" id="CategoryList">
+                    <option value="0">select...</option>
+                    @foreach(var item in selectresults)
+                    {
+                        // access each item in the given collection one at a time
+                        // foreach manages entering, movement, and exit of the collection
+                        // each item will hold 2 values
+                        // access to item data can be by 
+                        //  a)index technique ([n] where n starts at 0) and represents a column on the item row
+                        //  b)property name (Sql Title column name) you can use either or both
+                        <option value="@item[0]">@item.CategoryName</option>
+                    }
+                </select>
+                <br />
+                <button type="submit" name="formButton" value="submit" class="btn btn-primary">Search Products</button>
+
+            </div>
+        </div>
+    </form>
+
+
+
+    @section footer
+{
+        <p>
+            &copy; CPSC1517, Nait Today's date is
+            @DateTime.Today.ToLongDateString().
+        </p>}
+</div>
