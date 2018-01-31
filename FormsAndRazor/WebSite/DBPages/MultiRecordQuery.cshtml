@@ -1,4 +1,4 @@
-﻿@{
+@{
     Page.Title = "DB Multi Record Query";
     Layout = "~/_Layout.cshtml";
 
@@ -32,6 +32,53 @@
         <h1>DB Query: Multiple Record Query</h1>
     }
 
+    @if(IsPost)
+    {
+        // procesing of the submit button
+        // retreive the selected value fomr thr ddl
+        // the value is the hidden value on the option tag
+        var categoryid = Request.Form["CategoryList"];
+
+        // did the user actually select a category
+        // prompt line value is 0
+        if(categoryid.Equals("0"))
+        {
+            <p><span style="color:firebrick">You did not select a category. Try again.</span></p>
+        }
+        else
+        {
+            // let us chace to see if there are any products for the selected category
+            // query to check the products table for the selected category
+            querycommand = "SELECT ProductID "
+                            + "FROM Products "
+                            + "WHERE CategoryID = @0";
+
+            //Execution: use Query()
+            var productresults = db.Query(querycommand, categoryid);
+
+            // check to see if any records have been returned
+            //QuerySingle uses == null
+            //Query uses .Count == 0
+            if (productresults.Count() == 0)
+            {
+                <p><span style="color:firebrick">There are no products for the category. @categoryid</span></p>
+            }
+            else
+            {
+                // go to another page passing a data value to the new page
+                // Response.Redirect(pagename) this is without a parater passing
+
+                // for parameter passing, new syntax: 
+                // Reponse.Redirect("pagename?parameter&parameter&...")
+                // ? parameters to follow
+                // parameter syntax: indentifierLabel=theValue
+                // & separates multiple parameters
+
+                // parameter information is passed on the URL in plain text
+                Response.Redirect("WebQuery.cshtml?cid=" + categoryid);
+            }
+        }
+    }
     <form id="theForm" action="" method="post">
         <div class="row">
             <div class="col-md-offset-5">
