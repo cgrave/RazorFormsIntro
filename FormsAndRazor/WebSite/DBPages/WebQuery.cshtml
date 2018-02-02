@@ -1,19 +1,48 @@
-﻿@{
+@{
     Page.Title = "DB WebGrid Display";
     Layout = "~/_Layout.cshtml";
 
-    //access data from a Form uses .Form["controlname"]
+    //accessing data from a Form uses .Form["controlname"]
     //accessing data from your url is done using .QueryString["identifierLabel"]
-    //data return from QueryString is datatype string
-    // if the identifierLabel does not exists, a null is returned
+    //data returned from QueryString is datatype string
+    //if the identifierLabel does not exists, a null is returned
     var cid = Request.QueryString["cid"];
 
-    // if there was no cid found, should one question how a user accessed this page
-    // if there is no cid, this page will return the user to the appropriate search page which supplies the required parameter
-    if(string.IsNullOrEmpty(cid))
+    //if there was no cid found, should one question how a user
+    //    accessed this page
+    //if there is no cid, this page will return the user to the appropriate
+    //    search page which supplied the required parameter
+    if (string.IsNullOrEmpty(cid))
     {
         Response.Redirect("MultiRecordQuery.cshtml");
     }
+
+    //connection
+    var db = Database.Open("NorthwindDB");
+
+    // create query to obtain the category name, the query will return a single value
+    var querycommand = "SELECT CategoryName FROM Categories "
+                        + "WHERE CategoryID = @0 ";
+    //execution
+    //QueryValue: returns a single value
+    var categoryname = db.QueryValue(querycommand, cid);
+
+    //using the categoryid passed to this page, retreive the associated product data
+    querycommand = "SELECT ProductID, ProductName, UnitPrice, "
+                    + "UnitsInStock, Discontinued "
+                    + "FROM Products "
+                    + "WHERE CategoryID = @0 "
+                    + "ORDER BY ProductName";
+
+    //executiuon
+    //Query() : 0,1 or more rows
+    var productResults = db.Query(querycommand, cid);
+
+    //WebGrid is an object
+    //When you creat an instance of WebGrid, you must pass the data collection on the new command
+    var gridinstance = new WebGrid(productResults);
+
+
 }
 
 @section head
@@ -24,10 +53,29 @@
 <div>
     @section banner
 {
-        <h1>Query Display: Web Grid</h1>
+        <h1>Query Display: WebGrid</h1>
     }
+        <h3>Products for : @categoryname</h3>
+        <br /><br />
 
-    Category ID: @cid
+
+    @gridinstance.GetHtml(
+        tableStyle:"table table-bordered table-striped table-hover",
+        columns: gridinstance.Columns(
+            gridinstance.Column(columnName:"ProductID", header:"ID", canSort:true),
+            gridinstance.Column(columnName:"ProductName", header:"Name", canSort:true),
+            gridinstance.Column(columnName:"UnitPrice", header: "$", canSort:false , format:(item)=> item.UnitPrice.ToString("0.00")),
+            gridinstance.Column(columnName:"Discontinued", header:"Disc",
+                format:@<input name="Discontinued" type="checkbox" value="@item.Discontinued" @(item.Discontinued == true?"Checked":null)/>), 
+            gridinstance.Column(header:"", format:@<text><a href="~/DBPages/WebGridDestination.cshtml?pid=@item.ProductID" onclick="return confirm('Are you sure you wish to view @item.Productname ?')">
+            View
+            </a></text>)
+                
+            
+            
+            )    
+    );
+
 
     @section footer
 {
